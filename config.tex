@@ -1,0 +1,206 @@
+\usepackage[utf8]{inputenc} 
+\usepackage[T1]{fontenc}
+\usepackage{setspace}
+\usepackage[french]{babel}
+\usepackage{csquotes}
+
+\usepackage[mode=buildnew]{standalone}
+
+\usepackage{xparse}
+%\usepackage{pgfpages}
+%\setbeameroption{show notes}
+%\setbeameroption{show notes on second screen=right}
+
+\newcounter{sp}
+
+
+\newcommand{\inseqa}[1]{%
+	\rlap{$\displaystyle#1$}%
+	\pheqa}
+
+\newcommand*{\pheqa}{
+	\phantom{\sum_{\{x,y\} \notin U_1}\Big(d^+_{C_1}(x)+d^+_{C_1}(y)\Big)}}
+
+% footnote sans reférence
+%\makeatletter
+%\def\blfootnote{\gdef\@thefnmark{}\@footnotetext}
+%\makeatother
+
+
+%\setbeamertemplate{footnote}{%
+%\hangpara{2em}{1}%
+%\makebox[2em][l]{\insertfootnotemark}\footnotesize\insertfootnotetext\par%
+%}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%% ASPECT RATIO %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\ExplSyntaxOn
+\NewDocumentCommand{\ifaspectratio}{mmm}
+{
+	% Recover the option from those passed to the class
+	\keys_set:nf { zunbeltz/beameroptions } { \use:c { opt@beamer.cls } }
+	\str_if_eq:nVTF { #1 } \l_zunbeltz_aspectratio_tl { #2 } { #3 }
+}
+
+% We need to define only one key, the other are treated as `unknown'
+\keys_define:nn { zunbeltz/beameroptions }
+{
+	aspectratio .tl_set:N = \l_zunbeltz_aspectratio_tl,
+	aspectratio .initial:n = 43,
+	unknown .code:n = {},
+}
+
+% Generate the variants we need
+\cs_generate_variant:Nn \keys_set:nn { nf }
+\cs_generate_variant:Nn \str_if_eq:nnTF { nV }
+\ExplSyntaxOff
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%% TIKZ %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\usepackage{tikz}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+
+%% COLORS
+\definecolor{pum}{HTML}{FE5960}
+\definecolor{mblack}{HTML}{555554}
+\definecolor{jlirmm}{HTML}{EB940B}
+\definecolor{blirmm}{HTML}{1273B6}
+\definecolor{rlirmm}{HTML}{E3172C}
+\definecolor{vlirmm}{HTML}{4FA129}
+
+
+\colorlet{mcolor}{blirmm}
+%\colorlet{mblack}{black!75}
+
+
+%% TEMPLATE
+\usetheme{Luebeck}
+\setbeamertemplate{blocks}[shadow=false] 
+
+%\definecolor{beamer@blendedblue}{HTML}{FE5960} % changed this
+\colorlet{beamer@blendedblue}{mcolor}
+
+\setbeamercolor{normal text}{fg=black,bg=white}
+\setbeamercolor{alerted text}{fg=red}
+\setbeamercolor{example text}{fg=green!50!black}
+
+%% CHANGE LA COULEUR PRINCIPALE
+\setbeamercolor{structure}{fg=beamer@blendedblue}
+
+%% CHANGE LA COULEUR DU CADRE OU IL Y A LE PLAN
+\setbeamercolor{section in head/foot}{bg=mblack}
+%\setbeamercolor{author in head/foot}{bg=Brown}
+%\setbeamercolor{date in head/foot}{fg=Brown}
+
+\newcommand\coloreditem[1]{
+	\item[\textcolor{#1}{\usebeamertemplate{itemize \beameritemnestingprefix item}}]
+}
+%\newcommand\coloreditem[1]{\item[\tikz\draw[black, fill=#1] (0,0) rectangle (0.15,0.15);]}
+%\setbeamertemplate{itemize items}{\tikz\draw[black, fill=mcolor] (0,0) rectangle (0.15,0.15);}
+
+\newcommand*{\mcolbox}[1]{
+	\colorbox{mcolor}{\textcolor{white}{#1}}
+}
+\newcommand*{\Mcolbox}[2]{
+	\colorbox{#2}{\textcolor{white}{#1}}
+}
+
+\newcommand*{\lieu}[1]{
+	{\scriptsize \bsc{\textcolor{mblack}{#1}}}
+}
+
+\newcommand*{\MyArc}[1]{
+	postaction={decorate,decoration={markings, mark=at position #1 with {\arrow[>=stealth]{>}}}}
+}
+
+\newcommand*{\so}[1]{
+	\tikz{\draw[thick, #1] (0,0.2) -- (0,0); \draw[->, thick, \chicol](-0.01,0) -- (0.3,0);}
+}
+
+\makeatother
+
+%% NEW BLOCKS
+\newenvironment{Mblock}[1]{%
+	\setbeamercolor{block body}{bg=mcolor!15}
+	\setbeamercolor{block title}{bg=mcolor,fg=white}
+	\begin{block}{#1}}{\end{block}}
+
+\newenvironment{Vblock}[1]{%
+	\setbeamercolor{block body}{bg=vlirmm!15}
+	\setbeamercolor{block title}{bg=vlirmm,fg=white}
+	\begin{block}{#1}}{\end{block}}
+
+\newenvironment{Rblock}[1]{%
+	\setbeamercolor{block body}{bg=rlirmm!15}
+	\setbeamercolor{block title}{bg=rlirmm,fg=white}
+	\begin{block}{#1}}{\end{block}}
+
+
+\newenvironment{Jblock}[1]{%
+	\setbeamercolor{block body}{bg=jlirmm!15}
+	\setbeamercolor{block title}{bg=jlirmm,fg=white}
+	\begin{block}{#1}}{\end{block}}
+
+\newenvironment{Bblock}[1]{%
+	\setbeamercolor{block body}{bg=blirmm!15}
+	\setbeamercolor{block title}{bg=blirmm,fg=white}
+	\begin{block}{#1}}{\end{block}}
+
+
+%%% FRAMES NON NUMEROTEES
+
+\newcommand{\backupbegin}{
+	\newcounter{framenumberappendix}
+	\setcounter{framenumberappendix}{\value{framenumber}}
+	%\setbeamertemplate{footline}{}
+	
+}
+\newcommand{\backupend}{
+	\addtocounter{framenumberappendix}{-\value{framenumber}}
+	\addtocounter{framenumber}{\value{framenumberappendix}} 
+	%\setbeamertemplate{footline}{\vspace{-1cm}\small{\insertframenumber/\inserttotalframenumber}}
+}
+%\beamertemplatenavigationsymbolsempty
+%\newcounter{currentslide}
+%\makeatletter
+%\setcounter{currentslide}{\the\beamer@slideinframe}
+%\makeatother
+
+%%%%%%%%%%%%%%%
+
+
+%% AJOUTER LE NUMERO DE SLIDE
+\addtobeamertemplate{navigation symbols}{}{%
+	
+	
+	\usebeamerfont{footline}%
+	\usebeamercolor[fg]{footline}%
+	
+	\setcounter{sp}{\insertpagenumber}
+	\addtocounter{sp}{-\insertframestartpage}
+	\addtocounter{sp}{1}
+	
+	%\hspace{0.95cm}
+	%\arabic{sp} %% WARNING : A ENLEVER
+	\textcolor{mblack!35}{[}\insertframenumber/\inserttotalframenumber \textcolor{mblack!35}{]}
+}
+
+
+
+\setbeamerfont{frametitle}{size=\normalsize}
